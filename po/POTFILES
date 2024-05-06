@@ -1,0 +1,6 @@
+data/com.nedogeek.nedolens.desktop.in
+data/com.nedogeek.nedolens.metainfo.xml.in
+data/com.nedogeek.nedolens.gschema.xml
+src/main.py
+src/window.py
+src/window.ui

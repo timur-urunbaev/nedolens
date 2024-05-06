@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=nedolens
+Exec=nedolens
+Icon=com.nedogeek.nedolens
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

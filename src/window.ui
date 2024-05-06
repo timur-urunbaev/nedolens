@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="NedolensWindow" parent="AdwApplicationWindow">
+    <property name="default-width">700</property>
+    <property name="default-height">80</property>
+    <property name="content">
+      <object class="GtkEntry" id='entry'>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+      </object>
+    </property>
+  </template>
+</interface>
