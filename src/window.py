@@ -24,20 +24,18 @@ from gi.repository import Gtk
 class NedolensWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'NedolensWindow'
 
-    entry = Gtk.Template.Child()
+    #search_entry = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         # Connect to the "changed" signal of the GtkEntry
-        self.entry.connect("changed", self.on_entry_changed)
+        #self.search_entry.connect("changed", self.on_entry_changed)
 
-    def on_entry_changed(self, entry):
-        text = entry.get_text()
+    #def on_entry_changed(self, search_entry):
+        #text = search_entry.get_text()
 
-        if text:
-            self.popover.set_relative_to(self.entry)
-            self.popover.show_all()
-            self.popover.popup()
-        else:
-            self.popover.hide()
+        #if text:
+            #print(text)
+        #else:
+            #print("empty")

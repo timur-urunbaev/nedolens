@@ -3,13 +3,33 @@
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
   <template class="NedolensWindow" parent="AdwApplicationWindow">
-    <property name="default-width">700</property>
-    <property name="default-height">80</property>
-    <property name="content">
-      <object class="GtkEntry" id='entry'>
+    <property name="width-request">700</property>
+    <property name="height-request">500</property>
+    <child>
+    <object class="GtkBox">
+      <property name="orientation">vertical</property>
+      <child>
+        <object class="GtkSearchEntry" id='search_entry'>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-      </object>
-    </property>
+        </object>
+      </child>
+      <child>
+        <object class="AdwPreferencesPage">
+          <property name="title">Results</property>
+          <child>
+            <object class="AdwPreferencesGroup">
+              <property name="title">Calculator</property>
+              <child>
+                <object class="AdwActionRow" id="results">
+                <property name="title">12</property>
+                </object>
+              </child>
+            </object>
+          </child>
+        </object>
+      </child>
+    </object>
+    </child>
   </template>
 </interface>
