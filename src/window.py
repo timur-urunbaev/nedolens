@@ -17,6 +17,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import re
 from gi.repository import Adw
 from gi.repository import Gtk
 
@@ -24,18 +25,23 @@ from gi.repository import Gtk
 class NedolensWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'NedolensWindow'
 
-    #search_entry = Gtk.Template.Child()
+    search_entry = Gtk.Template.Child()
+    box = Gtk.Template.Child()
+    results = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+
         # Connect to the "changed" signal of the GtkEntry
-        #self.search_entry.connect("changed", self.on_entry_changed)
+        self.search_entry.connect("changed", self.on_entry_changed)
+        self.search_entry.set_size_request(600, 70)
+        self.results.set_size_request(600, 50)
 
-    #def on_entry_changed(self, search_entry):
-        #text = search_entry.get_text()
+    def on_entry_changed(self, search_entry):
+        text = search_entry.get_text()
 
-        #if text:
-            #print(text)
-        #else:
-            #print("empty")
+        if text:
+            print(text)
+        else:
+            print("empty")

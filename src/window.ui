@@ -3,10 +3,10 @@
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
   <template class="NedolensWindow" parent="AdwApplicationWindow">
-    <property name="width-request">700</property>
+    <property name="width-request">600</property>
     <property name="height-request">500</property>
     <child>
-    <object class="GtkBox">
+    <object class="GtkBox" id="box">
       <property name="orientation">vertical</property>
       <child>
         <object class="GtkSearchEntry" id='search_entry'>
@@ -16,13 +16,13 @@
       </child>
       <child>
         <object class="AdwPreferencesPage">
-          <property name="title">Results</property>
           <child>
             <object class="AdwPreferencesGroup">
-              <property name="title">Calculator</property>
+              <property name="title">Results</property>
               <child>
                 <object class="AdwActionRow" id="results">
                 <property name="title">12</property>
+                <property name="subtitle">Calculator</property>
                 </object>
               </child>
             </object>
