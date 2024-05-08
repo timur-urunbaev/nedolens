@@ -30,7 +30,9 @@ class NedolensWindow(Adw.ApplicationWindow):
             self.set_size_request(600, 500)
             self.search_and_display(text)
         else:
-            self.set_size_request(600, 70)
+            self.set_size_request(600, -1)
+            self.remove_all_rows(self.group)
+
 
     def search_and_display(self, query):
         base_path = 'C:/Users/admin/programming/python/nedolens'  # Set your base directory path
@@ -45,6 +47,11 @@ class NedolensWindow(Adw.ApplicationWindow):
         group = Adw.PreferencesGroup()
         self.page.add(group, False, False, 0)
         group.show_all()
+
+    def remove_all_rows(group):
+        children = group.get_children()
+        for child in children:
+            group.remove(child)
 
     def add_row(self, result, integration="?"):
         # Add action row dynamically
