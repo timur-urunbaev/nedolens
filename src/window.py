@@ -45,7 +45,7 @@ class NedolensWindow(Adw.ApplicationWindow):
             page_height = self.page.get_allocation().height
             print(page_height)
             self.set_size_request(600, 100+page_height)
-            self.add_row(text, "Nautilus")
+            self.add_row(text, "integration_name")
         else:
             self.set_size_request(600, 70)
 
