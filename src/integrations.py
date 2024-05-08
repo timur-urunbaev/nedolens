@@ -49,8 +49,14 @@ class Files:
         self.name = "Files"
         self.icon = ""
 
+    def search(self, pattern):
+        pass
+
 class Settings:
     def __init__(self):
         self.result = None
         self.name = "Settings"
         self.icon = ""
+
+    def search(self):
+        pass
