@@ -19,20 +19,6 @@
           <child>
             <object class="AdwPreferencesGroup" id="group">
               <property name="title">Results</property>
-              <property name="opacity">0.5</property>
-              <child>
-                <object class="AdwActionRow" id="results">
-                <property name="title">12</property>
-                <property name="subtitle">Calculator</property>
-                  <child>
-                    <object class="GtkImage">
-                      <property name="icon-name">edit-copy-symbolic</property>
-                      <property name="margin-end">12</property>
-                      <property name="icon-size">1</property>
-                    </object>
-                  </child>
-                </object>
-              </child>
             </object>
           </child>
         </object>

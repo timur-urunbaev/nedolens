@@ -29,7 +29,6 @@ class NedolensWindow(Adw.ApplicationWindow):
     search_entry = Gtk.Template.Child()
     page = Gtk.Template.Child()
     group = Gtk.Template.Child()
-    results = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -46,11 +45,7 @@ class NedolensWindow(Adw.ApplicationWindow):
             page_height = self.page.get_allocation().height
             print(page_height)
             self.set_size_request(600, 100+page_height)
-            self.results.set_title(text)
-            self.results.set_subtitle("Firefox")
-            print(self.group)
-            if len(text) > 5:
-                self.add_row(text[:5], "Nautilus")
+            self.add_row(text, "Nautilus")
         else:
             self.set_size_request(600, 70)
 
