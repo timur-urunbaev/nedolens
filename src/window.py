@@ -14,6 +14,7 @@ class NedolensWindow(Adw.ApplicationWindow):
     group = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
+      
         super().__init__(**kwargs)
         self.set_default_size(600, -1)
 
@@ -25,6 +26,7 @@ class NedolensWindow(Adw.ApplicationWindow):
         text = search_entry.get_text()  # Remove previous search results
 
         if text:
+          
             self.set_size_request(600, 500)
             self.search_and_display(text)
         else:
@@ -36,6 +38,7 @@ class NedolensWindow(Adw.ApplicationWindow):
             for name in dirs + files:
                 if query.lower() in name.lower():
                     self.add_row(os.path.join(root, name), "File" if os.path.isfile(os.path.join(root, name)) else "Directory")
+
 
     def add_group(self):
         # Add action row dynamically
@@ -49,4 +52,3 @@ class NedolensWindow(Adw.ApplicationWindow):
         self.group.add(action_row)
         action_row.set_title(result)
         action_row.set_subtitle(integration)
-        action_row.show_all()

@@ -31,6 +31,7 @@ nedolens_sources = [
   'main.py',
   'window.py',
   'config.py',
+  'integrations.py',
 ]
 
 install_data(nedolens_sources, install_dir: moduledir)
