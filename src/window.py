@@ -47,13 +47,20 @@ class NedolensWindow(Adw.ApplicationWindow):
             self.set_size_request(600, 500)
             self.add_row(text, "integration_name")
         else:
-            self.set_size_request(600, 70)
+            self.set_size_request(600, -1)
+            self.remove_all_rows(self.group)
+
 
     def add_group(self):
         # Add action row dynamically
         group = Adw.PreferencesGroup()
         self.page.add(group, False, False, 0)
         group.show_all()
+
+    def remove_all_rows(group):
+        children = group.get_children()
+        for child in children:
+            group.remove(child)
 
     def add_row(self, result, integration="?"):
         # Add action row dynamically
