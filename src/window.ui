@@ -3,8 +3,6 @@
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
   <template class="NedolensWindow" parent="AdwApplicationWindow">
-    <property name="width-request">600</property>
-    <property name="height-request">500</property>
     <child>
     <object class="GtkBox" id="box">
       <property name="orientation">vertical</property>
@@ -15,14 +13,24 @@
         </object>
       </child>
       <child>
-        <object class="AdwPreferencesPage">
+        <object class="AdwPreferencesPage" id="page">
+          <property name="width-request">600</property>
+          <property name="height-request">50</property>
           <child>
-            <object class="AdwPreferencesGroup">
+            <object class="AdwPreferencesGroup" id="group">
               <property name="title">Results</property>
+              <property name="opacity">0.5</property>
               <child>
                 <object class="AdwActionRow" id="results">
                 <property name="title">12</property>
                 <property name="subtitle">Calculator</property>
+                  <child>
+                    <object class="GtkImage">
+                      <property name="icon-name">edit-copy-symbolic</property>
+                      <property name="margin-end">12</property>
+                      <property name="icon-size">1</property>
+                    </object>
+                  </child>
                 </object>
               </child>
             </object>

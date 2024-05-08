@@ -25,23 +25,44 @@ from gi.repository import Gtk
 class NedolensWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'NedolensWindow'
 
-    search_entry = Gtk.Template.Child()
     box = Gtk.Template.Child()
+    search_entry = Gtk.Template.Child()
+    page = Gtk.Template.Child()
+    group = Gtk.Template.Child()
     results = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-
+        self.set_default_size(600, 70)
         # Connect to the "changed" signal of the GtkEntry
         self.search_entry.connect("changed", self.on_entry_changed)
         self.search_entry.set_size_request(600, 70)
-        self.results.set_size_request(600, 50)
 
     def on_entry_changed(self, search_entry):
         text = search_entry.get_text()
 
         if text:
-            print(text)
+            page_height = self.page.get_allocation().height
+            print(page_height)
+            self.set_size_request(600, 100+page_height)
+            self.results.set_title(text)
+            self.results.set_subtitle("Firefox")
+            print(self.group)
+            if len(text) > 5:
+                self.add_row(text[:5], "Nautilus")
         else:
-            print("empty")
+            self.set_size_request(600, 70)
+
+    def add_group(self):
+        # Add action row dynamically
+        group = Adw.PreferencesGroup()
+        self.page.add(group, False, False, 0)
+        group.show_all()
+
+    def add_row(self, result, integration="?"):
+        # Add action row dynamically
+        action_row = Adw.ActionRow()
+        self.group.add(action_row)
+        action_row.set_title(result)
+        action_row.set_subtitle(integration)
