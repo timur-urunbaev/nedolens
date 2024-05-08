@@ -31,9 +31,10 @@ class NedolensWindow(Adw.ApplicationWindow):
     group = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
-        self.set_default_size(600, 70)
+        super().__init__(**kwargs)
+        self.set_default_size(600, -1)
+
         # Connect to the "changed" signal of the GtkEntry
         self.search_entry.connect("changed", self.on_entry_changed)
         self.search_entry.set_size_request(600, 70)
@@ -42,9 +43,8 @@ class NedolensWindow(Adw.ApplicationWindow):
         text = search_entry.get_text()
 
         if text:
-            page_height = self.page.get_allocation().height
-            print(page_height)
-            self.set_size_request(600, 100+page_height)
+            # if re.
+            self.set_size_request(600, 500)
             self.add_row(text, "integration_name")
         else:
             self.set_size_request(600, 70)
