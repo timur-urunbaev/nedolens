@@ -1,4 +1,4 @@
-import requests
+# import requests
 import platform
 import getpass
 import math
@@ -6,30 +6,35 @@ import webbrowser
 from datetime import datetime
 
 class Web:
-    def __init__(self, text):
+    def __init__(self):
         """
         This class is used for websearch related integrations.
         """
         self.result =  None
         self.name = "Web"
         self.icon = "external-link-symbolic"
-        search(text)
 
     def search(self, text):
         query = text.split()
         webbrowser.open(f"https://www.google.com/search?q={'+'.join(query)}")
 
 class Calculator:
-    def __init__(self, expression):
+    def __init__(self):
         """
         This class is used for calculator related integrations.
         """
-        self.result = None
+        # Define the patterns
+        number_pattern = r"[+-]?\d+(\.\d+)?([eE][+-]?\d+)?"
+        pi_pattern = r"pi"
+
+        function_pattern = r"(sin|cos|tan|exp|log)"
+        parentheses_pattern = r"\((.*?)\)"
+
         self.name = "Calculator"
         self.icon = "copy-symbolic"
-        return self.calculate(expression)
+        self.pattern = rf"{number_pattern}|{function_pattern}\({number_pattern}|{pi_pattern}"
 
-    def calculate(expression):
+    def calculate(self, expression):
         # Replace 'pi' with its numeric value
         expression = expression.replace('pi', str(math.pi))
         # Replace 'sin', 'cos', 'tan' with the respective math functions
@@ -57,15 +62,13 @@ class Calendar:
         """
         This class is used for calendar related integrations.
         """
-        self.result = None
         self.name = "Calendar"
         self.icon = "external-link-symbolic"
+        self.pattern = r"\d{1,2}[-./]\d{1,2}[-./]\d{2,4}"
 
-    def get_day_of_week(date_string):
+    def get_day_of_week(self, match):
         try:
-            # Parse the input date string into a datetime object
-            date_obj = datetime.strptime(date_string, "%Y-%m-%d")
-            # Get the day of the week (0 = Monday, 1 = Tuesday, ..., 6 = Sunday)
+            date_obj = datetime.strptime(f"{match.group(1)}-{match.group(2)}-{match.group(3)}", "%d-%m-%Y")
             day_of_week = date_obj.strftime("%A")
             return day_of_week
         except ValueError:
@@ -97,9 +100,9 @@ class Files:
 
     def search(self, pattern):
         if platform.system() == 'Windows':
-            base_path = f'C:\Users\{getpass.getuser()}\'
+            base_path = f"C://Users//{getpass.getuser()}//"
         elif platform.system() == 'Linux':
-            base_path = f'/home/{getpass.getuser()}/'
+            base_path = f"/home/{getpass.getuser()}/"
         for root, dirs, files in os.walk(base_path):
             try:
                 for name in dirs + files:
