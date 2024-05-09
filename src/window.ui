@@ -4,7 +4,7 @@
   <requires lib="Adw" version="1.0"/>
   <template class="NedolensWindow" parent="AdwApplicationWindow">
     <child>
-    <object class="GtkBox" id="box">
+    <object class="GtkBox">
       <property name="orientation">vertical</property>
       <child>
         <object class="GtkSearchEntry" id='search_entry'>
