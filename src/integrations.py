@@ -2,6 +2,8 @@
 import platform
 import getpass
 import math
+import os
+import re
 import webbrowser
 from datetime import datetime
 
@@ -10,9 +12,8 @@ class Web:
         """
         This class is used for websearch related integrations.
         """
-        self.result =  None
         self.name = "Web"
-        self.icon = "external-link-symbolic"
+        self.icon = "edit-copy"
 
     def search(self, text):
         query = text.split()
@@ -94,22 +95,40 @@ class Contacts:
 
 class Files:
     def __init__(self):
-        self.result = None
+        self.conn = None
+        self.db_name = "index.sqlite"
         self.name = "Files"
         self.icon = "external-link-symbolic"
 
-    def search(self, pattern):
-        if platform.system() == 'Windows':
-            base_path = f"C://Users//{getpass.getuser()}//"
-        elif platform.system() == 'Linux':
-            base_path = f"/home/{getpass.getuser()}/"
-        for root, dirs, files in os.walk(base_path):
-            try:
-                for name in dirs + files:
-                    if query.lower() in name.lower():
-                        self.add_row(os.path.join(root.replace('&', '&amp;'), name.replace('&', '&amp;')), "File" if os.path.isfile(os.path.join(root.replace('&', '&amp;'), name.replace('&', '&amp;'))) else "Directory")
-            except PermissionError:
-                pass
+    def create_index_db(self):
+        if os.path.exists(self.db_name):
+            self.conn = sqlite3.connect(self.db_name)
+            c = self.conn.cursor()
+            c.execute('''CREATE TABLE IF NOT EXISTS files
+                         (id INTEGER PRIMARY KEY, path TEXT, size INTEGER)''')
+            self.conn.commit()
+            self.conn.close()
+
+    def index_filesystem(self, root_dir, db_file):
+        self.conn = sqlite3.connect(db_file)
+        c = conn.cursor()
+
+        for dirpath, _, filenames in os.walk(root_dir):
+            for filename in filenames:
+                filepath = os.path.join(dirpath, filename)
+                size = os.path.getsize(filepath)
+                c.execute("INSERT INTO files (path, size) VALUES (?, ?)", (filepath, size))
+
+        conn.commit()
+        conn.close()
+
+    def connect_to_db(db_file):
+        conn = sqlite3.connect(db_file)
+        return conn.cursor()
+
+    def search_files(prefix, cursor):
+        cursor.execute("SELECT * FROM files WHERE path LIKE ?", (prefix + '%',))
+        return cursor.fetchall()
 
 class Settings:
     def __init__(self):

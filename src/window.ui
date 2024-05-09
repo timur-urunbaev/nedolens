@@ -17,11 +17,6 @@
         <object class="AdwPreferencesPage" id="page">
           <property name="width-request">600</property>
           <property name="height-request">50</property>
-          <child>
-            <object class="AdwPreferencesGroup" id="group">
-              <property name="title">Results</property>
-            </object>
-          </child>
         </object>
       </child>
     </object>
