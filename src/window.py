@@ -24,9 +24,20 @@ class NedolensWindow(Adw.ApplicationWindow):
 
     def on_entry_changed(self, search_entry):
         text = search_entry.get_text()  # Remove previous search results
+        pattern = {
+            'calculator': r'^[\d\s\(\)\+\-\*\/\^\%\.,]|sin|cos|tan|asin|acos|atan|exp|sqrt|log|log10|factorial|pi$',
+            'calendar': '',
+            'weather': '',
+            'clock': '',
+            'contacts': '',
+            'web': '',
+            'files': ,
+            'settings': ,
+        }
 
         if text:
             self.set_size_request(600, 500)
+            if re.match()
             self.add_row(text, "temp")
             # self.search_and_display(text)
         else:

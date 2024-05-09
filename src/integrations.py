@@ -1,15 +1,23 @@
+import requests
 import platform
 import getpass
 import math
+import webbrowser
+from datetime import datetime
 
 class Web:
-    def __init__(self):
+    def __init__(self, text):
         """
         This class is used for websearch related integrations.
         """
         self.result =  None
         self.name = "Web"
         self.icon = "external-link-symbolic"
+        search(text)
+
+    def search(self, text):
+        query = text.split()
+        webbrowser.open(f"https://www.google.com/search?q={'+'.join(query)}")
 
 class Calculator:
     def __init__(self, expression):
@@ -53,11 +61,21 @@ class Calendar:
         self.name = "Calendar"
         self.icon = "external-link-symbolic"
 
+    def get_day_of_week(date_string):
+        try:
+            # Parse the input date string into a datetime object
+            date_obj = datetime.strptime(date_string, "%Y-%m-%d")
+            # Get the day of the week (0 = Monday, 1 = Tuesday, ..., 6 = Sunday)
+            day_of_week = date_obj.strftime("%A")
+            return day_of_week
+        except ValueError:
+            return "Invalid date format. Please use YYYY-MM-DD format."
+
 class Weather:
     def __init__(self):
         self.result = None
         self.name = "Weather"
-        self.icon = ""
+        self.icon = "weather-overcast-symbolic"
 
 class Clock:
     def __init__(self):
@@ -75,11 +93,11 @@ class Files:
     def __init__(self):
         self.result = None
         self.name = "Files"
-        self.icon = ""
+        self.icon = "external-link-symbolic"
 
     def search(self, pattern):
         if platform.system() == 'Windows':
-            base_path = ''
+            base_path = f'C:\Users\{getpass.getuser()}\'
         elif platform.system() == 'Linux':
             base_path = f'/home/{getpass.getuser()}/'
         for root, dirs, files in os.walk(base_path):
