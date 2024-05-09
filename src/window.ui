@@ -4,12 +4,13 @@
   <requires lib="Adw" version="1.0"/>
   <template class="NedolensWindow" parent="AdwApplicationWindow">
     <child>
-    <object class="GtkBox" id="box">
+    <object class="GtkBox">
       <property name="orientation">vertical</property>
       <child>
         <object class="GtkSearchEntry" id='search_entry'>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
+        <property name="placeholder_text">NedoLens Search</property>
         </object>
       </child>
       <child>
