@@ -1,6 +1,5 @@
 import re
 import os
-import getpass
 
 from .integrations import Calculator, Calendar, Weather, Clock, Contacts, Files, Settings, Web
 
@@ -26,12 +25,8 @@ class NedolensWindow(Adw.ApplicationWindow):
         # Dimensions and Window Size
         self.search_entry.set_size_request(600, 70)
         self.set_default_size(600, -1)
-        self.icon = None
 
         self.rows = []
-
-        # Create a Gio.Notification
-        notification = Gio.Notification()
 
         # APP Integrations
         self.calculator = Calculator()
@@ -43,64 +38,71 @@ class NedolensWindow(Adw.ApplicationWindow):
         self.settings = Settings()
         self.web = Web()
 
+        # Icons
+        self.web_icon = Gtk.Image.new_from_icon_name(self.web.icon)
+        self.calculator_icon = Gtk.Image.new_from_icon_name(self.calculator.icon)
+
         # Result Row
         self.result_row = Adw.ActionRow()
-        self.result_row.add_suffix(Gtk.Image.new_from_icon_name(self.icon))
         self.rows.append(self.result_row)
 
         # Web Row
         self.web_row = Adw.ActionRow()
         self.web_row.set_title(f"Search in web: ")
         self.web_row.set_subtitle(self.web.name)
+        self.web_row.add_prefix(self.web_icon)
+        self.web_row.connect("activated", self.open_in_browser)
         self.rows.append(self.web_row)
 
         # Result Group
         self.result_group = Adw.PreferencesGroup()
         self.result_group.set_title("Result")
         self.result_group.add(self.result_row)
+        #self.result_group.set_visible(False)
 
         # Web Group
         self.web_group = Adw.PreferencesGroup()
         self.web_group.set_title("Web")
         self.web_group.add(self.web_row)
+        self.web_button = Gtk.Button()
+        self.web_button.set_label("Open in web")
+        self.web_button.set_has_frame(False)
+        self.web_button.connect("clicked", self.open_in_browser)
+        self.web_row.add_suffix(self.web_button)
 
         self.page.add(self.result_group)
         self.page.add(self.web_group)
 
-
-
     def on_entry_changed(self, search_entry):
-        text = search_entry.get_text()  # Remove previous search results
+        self.text = search_entry.get_text()  # Remove previous search results
 
 
-        if text:
+        if self.text:
             self.result_group.set_visible(True)
             self.set_size_request(600, 500)
-            if re.match(self.calculator.pattern, text):
-                result = self.calculator.calculate(text)
+            if re.match(self.calculator.pattern, self.text):
+                result = self.calculator.calculate(self.text)
                 self.result_row.set_title(str(result))
                 self.result_row.set_subtitle(self.calculator.name)
-                self.result_row.connect("activated", self.copy_to_clipboard)
+                self.result_row.add_prefix(self.calculator_icon)
 
-            elif re.match(self.calendar.pattern, text):
+            elif re.match(self.calendar.pattern, self.text):
                 result = self.calendar.get_day_of_week(re.search(self.calendar.pattern, text))
                 self.result_row.set_title(result)
                 self.result_row.set_subtitle(self.calendar.name)
 
-            #elif re.match(pattern[], text):
-
-            #elif re.match(pattern[], text):
-
-            #elif re.match(pattern[], text):
             else:
-                for result in self.files.search("/home/nedogeek/", text):
+                for result in self.files.search(self.text):
                     row = Adw.ActionRow()
-                    row.set_title(result)
-                    row.set_subtitle(self.files.name)
+                    row.set_title(result['name'])
+                    row.set_subtitle(result['type'])
+                    icon = Gtk.Image.new_from_icon_name(result['icon'])
+                    row.add_prefix(icon)
+                    row.set_can_focus(True)
                     self.result_group.add(row)
-                self.result_group.set_visible(False)
+                self.result_group.set_visible(True)
 
-            self.web_row.set_title(f"Search in web: {text}")
+            self.web_row.set_title(f"Search in web: {self.text}")
             self.web_row.set_subtitle(self.web.name)
         else:
             self.result_group.set_visible(False)
@@ -113,35 +115,13 @@ class NedolensWindow(Adw.ApplicationWindow):
         for child in self.rows:
             group.remove(child)
 
-    def show_notification(self, title, body):
-        pass
+    def open_in_browser(self, widget):
+        text = self.search_entry.get_text()
+        self.web.search(str(text))
 
-    def copy_to_clipboard(self, widget, event):
-        # Set notification properties
-        notification.set_title("NedoLens")
-        notification.set_body("Copy to clipboard")
-        notification.set_urgency(Gio.NotificationUrgency.NORMAL)
-
-        print("Copy to clipboard")
-        # Show the notification
-        notification.show()
-
-    def on_key_press(self, widget, event):
-        keyval = event.keyval
-        if keyval == Gdk.KEY_Up:
-            self.move_focus(Gtk.DirectionType.UP)
-            return True
-        elif keyval == Gdk.KEY_Down:
-            self.move_focus(Gtk.DirectionType.DOWN)
-            return True
-        return False
-
-    def move_focus(self, direction):
-        current_focus = self.get_focus()
-        next_focus = current_focus.get_parent().get_focus_child()
-        if direction == Gtk.DirectionType.UP:
-            next_focus = next_focus.get_previous_sibling()
-        elif direction == Gtk.DirectionType.DOWN:
-            next_focus = next_focus.get_next_sibling()
-        if next_focus:
-            next_focus.grab_focus()
+    def open_file(self, path):
+            if platform.system() == "Windows":
+                # On Windows, use the 'start' command through 'cmd /c'
+                subprocess.run(['cmd', '/c', 'start', '', path], shell=True)
+            elif platform.system() == "Linux":
+                subprocess.run(['xdg-open', path], check=True)

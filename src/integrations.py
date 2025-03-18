@@ -1,10 +1,10 @@
 # import requests
 import platform
-import getpass
 import math
 import os
 import re
 import webbrowser
+import subprocess
 from datetime import datetime
 
 class Web:
@@ -13,7 +13,7 @@ class Web:
         This class is used for websearch related integrations.
         """
         self.name = "Web"
-        self.icon = "edit-copy"
+        self.icon = "folder-saved-search-symbolic"
 
     def search(self, text):
         query = text.split()
@@ -32,7 +32,7 @@ class Calculator:
         parentheses_pattern = r"\((.*?)\)"
 
         self.name = "Calculator"
-        self.icon = "copy-symbolic"
+        self.icon = "accessories-calculator-symbolic"
         self.pattern = rf"{number_pattern}|{function_pattern}\({number_pattern}|{pi_pattern}"
 
     def calculate(self, expression):
@@ -100,35 +100,32 @@ class Files:
         self.name = "Files"
         self.icon = "external-link-symbolic"
 
-    def create_index_db(self):
-        if os.path.exists(self.db_name):
-            self.conn = sqlite3.connect(self.db_name)
-            c = self.conn.cursor()
-            c.execute('''CREATE TABLE IF NOT EXISTS files
-                         (id INTEGER PRIMARY KEY, path TEXT, size INTEGER)''')
-            self.conn.commit()
-            self.conn.close()
+    def search(self, query):
+        results = []
 
-    def index_filesystem(self, root_dir, db_file):
-        self.conn = sqlite3.connect(db_file)
-        c = conn.cursor()
+        # Run the tracker3 command to search for files and directories
+        search_command = f"tracker3 search {query}"
+        process = subprocess.Popen(search_command.split(), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
 
-        for dirpath, _, filenames in os.walk(root_dir):
-            for filename in filenames:
-                filepath = os.path.join(dirpath, filename)
-                size = os.path.getsize(filepath)
-                c.execute("INSERT INTO files (path, size) VALUES (?, ?)", (filepath, size))
+        if process.returncode != 0:
+            print(f"Error during search: {stderr.decode('utf-8')}")
+            return results
 
-        conn.commit()
-        conn.close()
+        # Parse the output
+        for line in stdout.decode('utf-8').split('\n'):
+            if line:
+                path = line.strip()
+                name = path.split('/')[-1]
+                if '.' in name:  # crude way to distinguish between files and directories
+                    file_type = 'File'
+                    icon = 'text-x-generic-symbolic'
+                else:
+                    file_type = 'Directory'
+                    icon = 'folder-symbolic'
+                results.append({'path': path, 'name': name, 'type': file_type, 'icon': icon})
 
-    def connect_to_db(db_file):
-        conn = sqlite3.connect(db_file)
-        return conn.cursor()
-
-    def search_files(prefix, cursor):
-        cursor.execute("SELECT * FROM files WHERE path LIKE ?", (prefix + '%',))
-        return cursor.fetchall()
+        return results
 
 class Settings:
     def __init__(self):

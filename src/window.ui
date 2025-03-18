@@ -17,6 +17,7 @@
         <object class="AdwPreferencesPage" id="page">
           <property name="width-request">600</property>
           <property name="height-request">50</property>
+          <property name="can_focus">True</property>
         </object>
       </child>
     </object>
